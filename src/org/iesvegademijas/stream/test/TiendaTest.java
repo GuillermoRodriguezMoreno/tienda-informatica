@@ -16,13 +16,14 @@ import org.iesvegademijas.hibernate.Fabricante;
 import org.iesvegademijas.hibernate.FabricanteHome;
 import org.iesvegademijas.hibernate.Producto;
 import org.iesvegademijas.hibernate.ProductoHome;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
 class TiendaTest {
 	
 	@Test
-	void testSkeletonFrabricante() {
+	void testSkeletonFabricante() {
 	
 		FabricanteHome fabHome = new FabricanteHome();
 		
@@ -33,6 +34,7 @@ class TiendaTest {
 		
 			
 			//TODO STREAMS
+			Assertions.assertEquals(9, listFab.size());
 			
 		
 			fabHome.commitTransaction();
@@ -118,7 +120,11 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
-	
+			List<String> listNombrePrecio = listProd.stream()
+					.map(p -> "Nombre: " + p.getNombre() + ", Precio: " + p.getPrecio())
+					.collect(toList());
+
+			listNombrePrecio.forEach(s -> System.out.println(s));
 			
 			prodHome.commitTransaction();
 		}
@@ -146,6 +152,10 @@ class TiendaTest {
 			//TODO STREAMS
 			
 			prodHome.commitTransaction();
+
+			List<Producto> newPodList = listProd.stream()
+
+
 		}
 		catch (RuntimeException e) {
 			prodHome.rollbackTransaction();
