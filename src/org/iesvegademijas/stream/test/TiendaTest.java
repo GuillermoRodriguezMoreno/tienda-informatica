@@ -544,7 +544,12 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();	
 			
 			//TODO STREAMS
-				
+			List<Producto> newList = listProd.stream()
+							.filter(prod -> prod.getPrecio() >= 80 && prod.getPrecio() <= 300)
+							.collect(toList());
+
+			newList.forEach(producto -> System.out.println(producto));
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -567,6 +572,12 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();		
 						
 			//TODO STREAMS
+
+			List<Producto> newList = listProd.stream()
+					.filter(prod -> prod.getPrecio() > 200 && prod.getFabricante().getCodigo().equals(6))
+					.collect(toList());
+
+			newList.forEach(producto -> System.out.println(producto));
 				
 			prodHome.commitTransaction();
 		}
@@ -590,7 +601,21 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();		
 			
 			//TODO STREAMS
-				
+
+			final Set<Integer> setValidos = new HashSet<>();
+
+			setValidos.add(1);
+			setValidos.add(3);
+			setValidos.add(5);
+
+			// setValidos es una closura, variable externa al lambda que queda atrapada
+
+			List<Producto> newList = listProd.stream()
+							.filter(prod -> setValidos.contains(prod.getFabricante().getCodigo()))
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -613,7 +638,13 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();		
 			
 			//TODO STREAMS
-				
+
+			List<String> newList = listProd.stream()
+							.map(prod -> prod.getNombre() + prod.getPrecio()*100)
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -639,7 +670,14 @@ class TiendaTest {
 			List<Fabricante> listFab = fabHome.findAll();
 					
 			//TODO STREAMS
-		
+
+			List<String> newList = listFab.stream()
+							.filter(fab -> fab.getNombre().charAt(0) == 'S')
+							.map(fabricante -> fabricante.getNombre())
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
 			fabHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -663,6 +701,12 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			List<Producto> newList = listProd.stream()
+							.filter(prod -> prod.getNombre().contains("Portátil"))
+							.collect(toList());
+
+			newList.forEach(System.out::println);
 				
 			prodHome.commitTransaction();
 		}
@@ -687,7 +731,14 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
-				
+
+			List<String> newList = listProd.stream()
+							.filter(prod -> prod.getNombre().contains("Monitor") && prod.getPrecio() < 215)
+							.map(producto -> producto.getNombre() + " " + producto.getPrecio())
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -701,6 +752,7 @@ class TiendaTest {
 	 * 22. Lista el nombre y el precio de todos los productos que tengan un precio mayor o igual a 180€. 
 	 * Ordene el resultado en primer lugar por el precio (en orden descendente) y en segundo lugar por el nombre (en orden ascendente).
 	 */
+	@Test
 	void test22() {
 		
 		
@@ -711,6 +763,16 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			//.sorted(comparing(Producto::getNombre).thenComparing(comparing(Producto::getPrecio).reversed()))
+
+			List<String> newList = listProd.stream()
+							.filter(prod -> prod.getPrecio() >= 180)
+							.sorted(comparing(Producto::getPrecio).reversed().thenComparing(comparing(Producto::getNombre)))
+							.map(producto -> producto.getNombre() + " " + producto.getPrecio())
+							.collect(toList());
+
+			newList.forEach(System.out::println);
 				
 			prodHome.commitTransaction();
 		}
@@ -735,6 +797,13 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			List<String> newList = listProd.stream()
+							.sorted(comparing(o -> o.getFabricante().getNombre()))
+							.map(prod -> prod.getNombre() + " " + prod.getPrecio() + " " + prod.getFabricante().getNombre())
+							.collect(toList());
+
+			newList.forEach(System.out::println);
 			
 			prodHome.commitTransaction();
 		}
@@ -758,6 +827,13 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			Optional<String> masCaro = listProd.stream()
+							.sorted(comparing(Producto::getPrecio).reversed())
+							.map(prod -> prod.getNombre() + " " + prod.getPrecio() + " " + prod.getFabricante().getNombre())
+							.findFirst();
+
+			masCaro.ifPresent(System.out::println);
 			
 			prodHome.commitTransaction();
 		}
@@ -781,7 +857,13 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
-			
+
+			List<Producto> newList = listProd.stream()
+							.filter(prod -> prod.getFabricante().getNombre().equals("Crucial") && prod.getPrecio() > 200)
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -804,6 +886,16 @@ class TiendaTest {
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			List<Producto> newList = listProd.stream()
+							.filter(
+									prod -> prod.getFabricante().getNombre().equals("Asus") ||
+											prod.getFabricante().getNombre().equals("Hewlett-Packard")||
+											prod.getFabricante().getNombre().equals("Seagate")
+							)
+							.collect(toList());
+
+			newList.forEach(System.out::println);
 			
 			prodHome.commitTransaction();
 		}
@@ -838,6 +930,12 @@ Monitor 27 LED Full HD |199.25190000000003|Asus
 			List<Producto> listProd = prodHome.findAll();
 			
 			//TODO STREAMS
+
+			List<String> newList = listProd.stream()
+							.filter(producto -> producto.getPrecio() >= 180)
+							.sorted(comparing(Producto::getPrecio).reversed().thenComparing(comparing(Producto::getNombre)))
+							.map(prod -> prod.getNombre() + " " + prod.getPrecio() + " " + prod.getFabricante().getNombre())
+							.collect(toList());
 			
 			prodHome.commitTransaction();
 		}
