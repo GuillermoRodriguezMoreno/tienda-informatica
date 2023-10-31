@@ -525,6 +525,9 @@ class TiendaTest {
 							.collect(toList());
 
 			System.out.println(newList);
+
+			// La lista debe tener tamaño 3
+			Assertions.assertEquals(3, newList.size());
 				
 			prodHome.commitTransaction();
 		}
@@ -554,7 +557,10 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(producto -> System.out.println(producto.getNombre() + " " + producto.getPrecio()));
-				
+
+			// Tamaño debe ser 3
+			Assertions.assertEquals(3, newList.size());
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -582,6 +588,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(producto -> System.out.println(producto));
+
+			// La lista debe tener tamaño 7
+			Assertions.assertEquals(7, newList.size());
 
 			prodHome.commitTransaction();
 		}
@@ -611,6 +620,9 @@ class TiendaTest {
 					.collect(toList());
 
 			newList.forEach(producto -> System.out.println(producto));
+
+			// La lista debe tener tamaño 1
+			Assertions.assertEquals(1, newList.size());
 				
 			prodHome.commitTransaction();
 		}
@@ -649,6 +661,9 @@ class TiendaTest {
 
 			newList.forEach(System.out::println);
 
+			// La lista debe tener tamaño 5
+			Assertions.assertEquals(5, newList.size());
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -673,10 +688,15 @@ class TiendaTest {
 			//TODO STREAMS
 
 			List<String> newList = listProd.stream()
-							.map(prod -> prod.getNombre() + prod.getPrecio()*100)
+							.map(prod -> prod.getNombre() + " " + prod.getPrecio()*100)
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			String test = newList.get(0).split(" ")[newList.get(0).split(" ").length-1];
+
+			// El precio debe estar multiplicado por 100
+			Assertions.assertEquals(Double.toString(listProd.get(0).getPrecio()*100), test);
 
 			prodHome.commitTransaction();
 		}
@@ -711,6 +731,10 @@ class TiendaTest {
 
 			newList.forEach(System.out::println);
 
+			// El tamaño de la lista dabe ser 2
+
+			Assertions.assertEquals(2, newList.size());
+
 			fabHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -740,6 +764,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// El tamaño de la lista debe ser 2
+			Assertions.assertEquals(2, newList.size());
 				
 			prodHome.commitTransaction();
 		}
@@ -771,6 +798,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// El tamaño de la lista debe ser 1
+			Assertions.assertEquals(1, newList.size());
 
 			prodHome.commitTransaction();
 		}
@@ -806,6 +836,12 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// Tamaño de la lista debe ser 7
+			Assertions.assertEquals(7, newList.size());
+
+			// precio primer producto debe ser 755
+			Assertions.assertEquals("755.0", newList.get(0).split(" ")[newList.get(0).split(" ").length-1]);
 				
 			prodHome.commitTransaction();
 		}
@@ -837,6 +873,12 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// Tamaño lista debe ser 11
+			Assertions.assertEquals(11, newList.size());
+
+			// El fabricante del primer producto debe ser Asus
+			Assertions.assertEquals("Asus", newList.get(0).split(" ")[newList.get(0).split(" ").length-1]);
 			
 			prodHome.commitTransaction();
 		}
@@ -867,6 +909,9 @@ class TiendaTest {
 							.findFirst();
 
 			masCaro.ifPresent(System.out::println);
+
+			// El fabricante debe ser Crucial
+			Assertions.assertEquals("Crucial", masCaro.get().split(" ")[masCaro.get().split(" ").length-1]);
 			
 			prodHome.commitTransaction();
 		}
@@ -896,6 +941,12 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// El tamaño de la lista debe ser 1
+			Assertions.assertEquals(1, newList.size());
+
+			// El nombre debe ser GeForce GTX 1080 Xtreme
+			Assertions.assertEquals("GeForce GTX 1080 Xtreme", newList.get(0).getNombre());
 
 			prodHome.commitTransaction();
 		}
@@ -929,6 +980,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// El tamaño de la lista debe ser 5
+			Assertions.assertEquals(5, newList.size());
 			
 			prodHome.commitTransaction();
 		}
@@ -1073,6 +1127,12 @@ Fabricante: Xiaomi
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// El tamaño de la lista debe ser 2
+			Assertions.assertEquals(2, newList.size());
+
+			// los productos asociados deben estar vacios
+			Assertions.assertTrue(newList.get(0).getProductos().isEmpty());
 								
 			fabHome.commitTransaction();
 		}
@@ -1100,6 +1160,9 @@ Fabricante: Xiaomi
 							.count();
 
 			System.out.println(total);
+
+			// Total debe ser 11
+			Assertions.assertEquals(11, total);
 			
 			prodHome.commitTransaction();
 		}
@@ -1131,6 +1194,9 @@ Fabricante: Xiaomi
 							.count();
 
 			System.out.println(total);
+
+			// Total debe ser 7
+			Assertions.assertEquals(7, total);
 			
 			prodHome.commitTransaction();
 		}
@@ -1161,6 +1227,20 @@ Fabricante: Xiaomi
 
 			media.ifPresent(System.out::println);
 
+			// Obtener media
+			 double mediaExpec = 0.0;
+			 double suma = 0.0;
+
+			for (Producto prod:listProd) {
+
+				suma = suma + prod.getPrecio();
+			}
+
+			mediaExpec = suma/listProd.size();
+
+			// Ambas medias deben ser iguales
+			Assertions.assertEquals(mediaExpec, media.getAsDouble());
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -1189,6 +1269,9 @@ Fabricante: Xiaomi
 							.min();
 
 			barato.ifPresent(System.out::println);
+
+			// El precio debe ser 59.99
+			barato.ifPresent(value -> Assertions.assertEquals(59.99, barato.getAsDouble()));
 			
 			prodHome.commitTransaction();
 		}
@@ -1219,6 +1302,18 @@ Fabricante: Xiaomi
 
 			System.out.println(suma);
 
+			// Obtencion suma
+			double sumaExpec = 0.0;
+
+			for (Producto prod:listProd) {
+
+				sumaExpec = sumaExpec + prod.getPrecio();
+
+			}
+
+			// Ambas sumas deben ser iguales
+			Assertions.assertEquals(sumaExpec, suma);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -1247,6 +1342,9 @@ Fabricante: Xiaomi
 							.count();
 
 			System.out.println(total);
+
+			// total debe ser 2
+			Assertions.assertEquals(2, total);
 			
 			prodHome.commitTransaction();
 		}
@@ -1277,6 +1375,27 @@ Fabricante: Xiaomi
 					.average();
 
 			media.ifPresent(System.out::println);
+			
+			// Obtencion media
+			
+			double mediaExpec = 0.0;
+			double suma = 0.0;
+			int tamaño = 0;
+
+			for (Producto prod:listProd) {
+				
+				if (prod.getFabricante().getNombre().equals("Asus")){
+					
+					suma = suma + prod.getPrecio();
+					tamaño++;
+				}
+			}
+			
+			mediaExpec = suma/tamaño;
+			
+			// Ambas medias deben ser iguales
+			double finalMediaExpec = mediaExpec; // conversion a final
+			media.ifPresent(value -> Assertions.assertEquals(finalMediaExpec, media.getAsDouble()));
 			
 			prodHome.commitTransaction();
 		}
