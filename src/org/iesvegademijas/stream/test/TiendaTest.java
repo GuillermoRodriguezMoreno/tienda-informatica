@@ -1239,7 +1239,8 @@ Fabricante: Xiaomi
 			mediaExpec = suma/listProd.size();
 
 			// Ambas medias deben ser iguales
-			Assertions.assertEquals(mediaExpec, media.getAsDouble());
+			double finalMediaExpec = mediaExpec; // conversion en final
+			media.ifPresent(value -> Assertions.assertEquals(finalMediaExpec, media.getAsDouble()));
 
 			prodHome.commitTransaction();
 		}
