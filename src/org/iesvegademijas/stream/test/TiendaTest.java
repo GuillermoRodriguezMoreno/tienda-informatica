@@ -32,8 +32,6 @@ class TiendaTest {
 		
 			
 			//TODO STREAMS
-			Assertions.assertEquals(9, listFab.size());
-			
 		
 			fabHome.commitTransaction();
 		}
@@ -74,7 +72,7 @@ class TiendaTest {
 	
 			List<Fabricante> listFab = fabHome.findAll();
 			assertEquals(9,listFab.size());
-		
+
 			fabHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -92,7 +90,7 @@ class TiendaTest {
 		
 			List<Producto> listProd = prodHome.findAll();		
 			assertEquals(11,listProd.size());
-		
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -123,6 +121,9 @@ class TiendaTest {
 					.collect(toList());
 
 			listNombrePrecio.forEach(s -> System.out.println(s));
+
+			// la lista contiene todo los productos
+			Assertions.assertEquals(11, listNombrePrecio.size());
 			
 			prodHome.commitTransaction();
 		}
@@ -160,6 +161,10 @@ class TiendaTest {
 
 					});
 
+			// La lista es de productos y la longitud es la correcta
+			Assertions.assertEquals(11, listProd.size());
+			Assertions.assertEquals(Producto.class, listProd.get(0).getClass());
+
 		}
 		catch (RuntimeException e) {
 			prodHome.rollbackTransaction();
@@ -188,6 +193,9 @@ class TiendaTest {
 							.collect(toList());
 
 			listNomMayus.forEach(s -> System.out.println(s));
+
+			// El nombre del primer producto esta en mayuscula
+			Assertions.assertEquals("Disco".toUpperCase(), listNomMayus.get(0).split(" ")[0]);
 		
 			prodHome.commitTransaction();
 		}
@@ -218,6 +226,9 @@ class TiendaTest {
 									.collect(toList());
 
 			newList.forEach(s -> System.out.println(s));
+
+			// Primeras dos letras del primer fabricante
+			Assertions.assertEquals("AS", newList.get(0).split(" ")[1]);
 					
 			fabHome.commitTransaction();
 		}
@@ -248,6 +259,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(integer -> System.out.println(integer));
+
+			// el tamaño de la lista debe ser 7
+			Assertions.assertEquals(7,newList.size());
 		
 			fabHome.commitTransaction();
 		}
@@ -278,6 +292,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(s -> System.out.println(s));
+
+			// El primer fabricante es Xiaomi
+			Assertions.assertEquals("Xiaomi", newList.get(0));
 		
 			fabHome.commitTransaction();
 		}
@@ -307,6 +324,9 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// el primer nombre es Asus
+			Assertions.assertEquals("Disco", newList.get(0).split(" ")[0]);
 			
 			prodHome.commitTransaction();
 		}
@@ -337,6 +357,10 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// tamaño de la lista debe ser 5
+			Assertions.assertEquals(5, newList.size());
+
 			fabHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -366,6 +390,10 @@ class TiendaTest {
 							.collect(toList());
 
 			newList.forEach(System.out::println);
+
+			// Los dos fabricantes deben ser Samsung y Seagate
+			Assertions.assertEquals("Samsung", newList.get(0).getNombre());
+			Assertions.assertEquals("Seagate", newList.get(1).getNombre());
 		
 			fabHome.commitTransaction();
 		}
@@ -396,6 +424,9 @@ class TiendaTest {
 							.collect(toList());
 
 			System.out.println(masBarato);
+
+			// precio debe ser 59.99
+			Assertions.assertEquals("59.99", masBarato.get(0).split(" ")[masBarato.get(0).split(" ").length-1]);
 				
 			prodHome.commitTransaction();
 		}
@@ -427,7 +458,10 @@ class TiendaTest {
 					.collect(toList());
 
 			System.out.println(masCaro);
-			
+
+			// el precio debe ser 755.0
+			Assertions.assertEquals("755.0", masCaro.get(0).split(" ")[masCaro.get(0).split(" ").length-1]);
+
 			prodHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
@@ -458,6 +492,9 @@ class TiendaTest {
 							.collect(toList());
 
 			System.out.println(newList);
+
+			// el tamaño debe ser 2
+			Assertions.assertEquals(2, newList.size());
 				
 			prodHome.commitTransaction();
 		}
@@ -924,7 +961,7 @@ Monitor 27 LED Full HD |199.25190000000003|Asus
 			prodHome.beginTransaction();
 		
 			List<Producto> listProd = prodHome.findAll();
-			
+
 			//TODO STREAMS
 
 			List<String> newList = listProd.stream()
@@ -1005,7 +1042,7 @@ Fabricante: Xiaomi
 			fabHome.beginTransaction();
 	
 			List<Fabricante> listFab = fabHome.findAll();
-					
+
 			//TODO STREAMS
 								
 			fabHome.commitTransaction();
@@ -1265,6 +1302,7 @@ Fabricante: Xiaomi
 			List<Producto> listProd = prodHome.findAll();
 						
 			//TODO STREAMS
+
 			
 			prodHome.commitTransaction();
 		}
@@ -1306,7 +1344,7 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
-		
+
 			fabHome.commitTransaction();
 		}
 		catch (RuntimeException e) {
