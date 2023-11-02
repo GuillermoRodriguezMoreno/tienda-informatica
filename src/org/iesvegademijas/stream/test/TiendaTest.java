@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
@@ -1018,11 +1019,6 @@ Monitor 27 LED Full HD |199.25190000000003|Asus
 
 			//TODO STREAMS
 
-			List<String> newList = listProd.stream()
-							.filter(producto -> producto.getPrecio() >= 180)
-							.sorted(comparing(Producto::getPrecio).reversed().thenComparing(comparing(Producto::getNombre)))
-							.map(prod -> prod.getNombre() + " " + prod.getPrecio() + " " + prod.getFabricante().getNombre())
-							.collect(toList());
 			
 			prodHome.commitTransaction();
 		}
@@ -1489,6 +1485,8 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+
 		
 			fabHome.commitTransaction();
 		}
@@ -1513,6 +1511,8 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+
 		
 			fabHome.commitTransaction();
 		}
@@ -1536,6 +1536,16 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+			List<String> newList =  listFab.stream()
+							.filter(fab -> fab.getProductos().size() >= 2)
+							.map(Fabricante::getNombre)
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
+			// La lista debe tener tamaño 4
+			Assertions.assertEquals(4, newList.size());
 		
 			fabHome.commitTransaction();
 		}
@@ -1560,6 +1570,24 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+			Map<Fabricante, Long> fabProd = new HashMap<>();
+
+			List<String> newList = listFab.stream()
+						.map(fabricante -> {
+							long numProductos = fabricante.getProductos()
+									.stream()
+									.filter(producto -> producto.getPrecio() >= 220.0)
+									.count();
+							return fabricante.getNombre() + "/" + numProductos;
+						})
+						.sorted((o1, o2) -> -1*o1.split("/")[1].compareTo(o2.split("/")[1]))
+						.collect(toList());
+
+			newList.forEach(System.out::println);
+
+			// El primer fabricante debe ser Lenovo
+			Assertions.assertEquals("Lenovo", newList.get(0).split("/")[0]);
 		
 			fabHome.commitTransaction();
 		}
@@ -1584,6 +1612,23 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+			List<String> newList = listFab.stream()
+							.filter(fab -> {
+								// uso una variable para filtrar por el precio total de los productos de un fabricante
+								double total = fab.getProductos().stream()
+										.mapToDouble(Producto::getPrecio)
+										.sum();
+								return total >= 1000;
+							})
+							.map(Fabricante::getNombre)
+							.collect(toList());
+
+			newList.forEach(System.out::println);
+
+			// Solo hay un fabricante y es Lenovo
+
+			Assertions.assertEquals("Lenovo", newList.get(0));
 		
 			fabHome.commitTransaction();
 		}
@@ -1609,6 +1654,9 @@ Hewlett-Packard              2
 			List<Fabricante> listFab = fabHome.findAll();
 				
 			//TODO STREAMS
+
+
+
 		
 			fabHome.commitTransaction();
 		}
